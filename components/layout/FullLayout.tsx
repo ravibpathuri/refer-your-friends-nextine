@@ -1,7 +1,10 @@
 'use client';
 
-import React, { use } from 'react';
-import { AppShell, Burger, Group, Skeleton } from '@mantine/core';
+import React from 'react';
+import Link from 'next/link';
+import { IconLogout, IconUser } from '@tabler/icons-react';
+import { signOut, useSession } from 'next-auth/react';
+import { AppShell, Avatar, Burger, Group, Menu, Skeleton, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 interface FullLayoutProps extends React.PropsWithChildren {
@@ -13,6 +16,10 @@ interface FullLayoutProps extends React.PropsWithChildren {
 
 const FullLayout: React.FC<FullLayoutProps> = ({ children }) => {
   const [opened, { toggle }] = useDisclosure();
+  const { data: session, status } = useSession();
+
+  console.log('Session:', session);
+  console.log('Status:', status);
 
   return (
     <AppShell
@@ -23,9 +30,36 @@ const FullLayout: React.FC<FullLayoutProps> = ({ children }) => {
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md">
+        <Group h="100%" px="md" justify="space-between">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           RB
+          <Group gap={'md'}>
+            <Menu shadow="md" width={200}>
+              <Menu.Target>
+                <Group gap="xs" style={{ cursor: 'pointer' }}>
+                  <Avatar
+                    src={session?.user?.image}
+                    alt={session?.user?.name || 'User'}
+                    radius="xl"
+                    size="sm"
+                  />
+                  <Text size="sm">{session?.user?.name || 'User'}</Text>
+                </Group>
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <Menu.Item leftSection={<IconUser size={14} />} component={Link} href="/profile">
+                  Profile
+                </Menu.Item>
+                <Menu.Item
+                  leftSection={<IconLogout size={14} />}
+                  onClick={() => signOut({ callbackUrl: '/login' })}
+                >
+                  Sign Out
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">

@@ -1,16 +1,23 @@
-export default function LoginPage() {
+'use client';
+
+import { IconBrandGithub } from '@tabler/icons-react';
+import { Button, Container, Paper, Text, Title } from '@mantine/core';
+import SignInButton from '@/components/ui/SignInButton';
+import { signIn } from '@/lib/auth';
+
+export default function SignInPage() {
   return (
-    <div>
-      <h1>Login</h1>
-      <form>
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" name="email" required />
-        <br />
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-        <br />
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <Container size={420} my={40}>
+      <Paper radius="md" p="xl" withBorder>
+        <Title order={2} ta="center" mb="md">
+          Welcome
+        </Title>
+        <Text c="dimmed" ta="center" mb="xl">
+          Sign in with your GitHub account
+        </Text>
+
+        <SignInButton />
+      </Paper>
+    </Container>
   );
 }
